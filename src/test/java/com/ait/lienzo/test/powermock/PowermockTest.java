@@ -169,4 +169,12 @@ public class PowermockTest {
         assertEquals(null, Foo.getSomeString());
         assertEquals(null, Bar.getStaticString());
     }
+
+    @Test
+    @Ignore
+    public void testInvocationWithoutMock() {
+        Foo.getSomeString();
+        when(someMock.getSomeInt()).thenReturn(7);
+        assertEquals(7, someMock.getSomeInt());
+    }
 }
