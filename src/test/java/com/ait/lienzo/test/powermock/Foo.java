@@ -6,6 +6,7 @@ import com.ait.lienzo.client.core.shape.Rectangle;
 public class Foo {
 
     public boolean isConstructorCalled = false;
+    public static boolean isVoidMethodCalled = false;
 
     public Foo() {
         isConstructorCalled = true;
@@ -21,6 +22,22 @@ public class Foo {
 
     public static String getSomeString() {
         return "Test String";
+    }
+
+    public static String getSomeString(String value) {
+        return "Test String: " + value;
+    }
+
+    public static void someVoidMethod() {
+        isVoidMethodCalled = true;
+    }
+
+    public static void resetStaticValues() {
+        isVoidMethodCalled = false;
+    }
+
+    public static int getSomeStaticPrimitiveInt() {
+        return 7;
     }
 
     private Layer layer;
