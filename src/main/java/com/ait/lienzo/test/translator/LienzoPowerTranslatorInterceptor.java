@@ -18,7 +18,10 @@ public class LienzoPowerTranslatorInterceptor implements LienzoMockitoClassTrans
                 for (CtMethod method : ctClass.getDeclaredMethods()) {
                     String returnType = method.getReturnType().getName();
                     if (!isVoidOrPrimitive(returnType)) {
-                        method.insertAt(1, "if ( com.ait.lienzo.test.Bridge.isStaticMocked() ) return (" + method.getReturnType().getName() + ")com.ait.lienzo.test.Bridge.invokeMethod(\"" + name + "\", \"" + method.getName() + "\");");
+                        method.insertAt(1,
+                                "com.ait.lienzo.test.Bridge.methodCalled(\"" + name + "\", \"" + method.getName() + "\"); " +
+                                "if ( com.ait.lienzo.test.Bridge.isStaticMocked() ) " +
+                                    "return (" + method.getReturnType().getName() + ")com.ait.lienzo.test.Bridge.invokeMethod(\"" + name + "\", \"" + method.getName() + "\");");
                     }
                 }
             }

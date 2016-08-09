@@ -1,12 +1,12 @@
 package com.ait.lienzo.test.powermock;
 
+import static com.ait.lienzo.test.LienzoMockito.when;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;
@@ -69,6 +69,12 @@ public class PowermockTest {
         Bridge.mockStatic();
 
         assertEquals(null, Foo.getSomeString());
+
+        when(Foo.getSomeString()).thenReturn("Mocked Value");
+        assertEquals("Mocked Value", Foo.getSomeString());
+
+        when(Foo.getSomeString()).thenReturn("Absolutely New Mocked Value");
+        assertEquals("Absolutely New Mocked Value", Foo.getSomeString());
     }
 
 }

@@ -137,6 +137,12 @@ public class LienzoMockito
     }
 
     public static <T> OngoingStubbing<T> when(T methodCall) {
-        return Mockito.when(methodCall);
+        if (Bridge.isMethodPrepared()) {
+            com.ait.lienzo.test.util.OngoingStubbing stub = new com.ait.lienzo.test.util.OngoingStubbing();
+            stub.setStub(Bridge.getInvoked());
+            return stub;
+        } else {
+            return Mockito.when(methodCall);
+        }
     }
 }
