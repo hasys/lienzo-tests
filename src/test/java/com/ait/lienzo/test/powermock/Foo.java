@@ -15,6 +15,10 @@ public class Foo {
         return 5;
     }
 
+    public String getSomeNoneStaticString() {
+        return "None static";
+    }
+
     public static String getSomeString() {
         return "Test String";
     }

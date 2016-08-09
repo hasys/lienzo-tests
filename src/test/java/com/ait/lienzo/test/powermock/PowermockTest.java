@@ -66,9 +66,13 @@ public class PowermockTest {
     @Test
     public void testStatic() {
         assertEquals("Test String", Foo.getSomeString());
+        Foo foo = new Foo();
+        assertEquals("None static", foo.getSomeNoneStaticString());
+
         Bridge.mockStatic();
 
         assertEquals(null, Foo.getSomeString());
+        assertEquals("None static", foo.getSomeNoneStaticString());
 
         when(Foo.getSomeString()).thenReturn("Mocked Value");
         assertEquals("Mocked Value", Foo.getSomeString());

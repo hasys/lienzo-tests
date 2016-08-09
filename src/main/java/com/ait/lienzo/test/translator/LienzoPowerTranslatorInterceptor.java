@@ -1,5 +1,7 @@
 package com.ait.lienzo.test.translator;
 
+import java.lang.reflect.Modifier;
+
 import com.ait.lienzo.test.settings.Settings;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -16,6 +18,9 @@ public class LienzoPowerTranslatorInterceptor implements LienzoMockitoClassTrans
             if (preparedName.equals(name)) {
                 CtClass ctClass = classPool.get(name);
                 for (CtMethod method : ctClass.getDeclaredMethods()) {
+                    if (!Modifier.isStatic(method.getModifiers())) {
+                        continue;
+                    }
                     String returnType = method.getReturnType().getName();
                     if (!isVoidOrPrimitive(returnType)) {
                         method.insertAt(1,
