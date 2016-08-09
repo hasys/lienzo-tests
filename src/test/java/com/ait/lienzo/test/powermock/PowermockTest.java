@@ -63,7 +63,7 @@ public class PowermockTest {
         String fColor = realFoo.getRectangle().getFillColor();
         Assert.assertEquals("#0000FF", fColor);
 
-        Bridge.mockStatic();
+        Bridge.mockStatic(Foo.class);
         assertEquals(null, Foo.getSomeString());
     }
 
@@ -71,7 +71,7 @@ public class PowermockTest {
     public void testStatic() {
         assertEquals("Test String", Foo.getSomeString());
 
-        Bridge.mockStatic();
+        Bridge.mockStatic(Foo.class);
         assertEquals(null, Foo.getSomeString());
 
         when(Foo.getSomeString()).thenReturn("Mocked Value");
@@ -86,7 +86,7 @@ public class PowermockTest {
         assertEquals("Test String", Foo.getSomeString());
         assertEquals("Test String: Hello", Foo.getSomeString("Hello"));
 
-        Bridge.mockStatic();
+        Bridge.mockStatic(Foo.class);
         assertEquals(null, Foo.getSomeString());
         assertEquals(null, Foo.getSomeString("Hello"));
 
@@ -105,12 +105,12 @@ public class PowermockTest {
     public void testNonStatic() {
         Foo foo = new Foo();
         assertEquals("None static", foo.getSomeNoneStaticString());
-        Bridge.mockStatic();
+        Bridge.mockStatic(Foo.class);
         assertEquals("None static", foo.getSomeNoneStaticString());
 
         foo = mock(Foo.class);
         assertEquals(null, foo.getSomeNoneStaticString());
-        Bridge.mockStatic();
+        Bridge.mockStatic(Foo.class);
         when(foo.getSomeNoneStaticString()).thenReturn("Some mocked Value");
         assertEquals("Some mocked Value", foo.getSomeNoneStaticString());
     }
@@ -124,7 +124,7 @@ public class PowermockTest {
         Foo.resetStaticValues();
         assertFalse(Foo.isVoidMethodCalled);
 
-        Bridge.mockStatic();
+        Bridge.mockStatic(Foo.class);
         Foo.someVoidMethod();
         assertFalse(Foo.isVoidMethodCalled);
     }
@@ -134,7 +134,7 @@ public class PowermockTest {
     public void testMockPrimitiveReturnValues() {
         assertEquals(7, Foo.getSomeStaticPrimitiveInt());
 
-        Bridge.mockStatic();
+        Bridge.mockStatic(Foo.class);
         assertEquals(0, Foo.getSomeStaticPrimitiveInt());
 
         when(Foo.getSomeStaticPrimitiveInt()).thenReturn(-9);
@@ -144,14 +144,29 @@ public class PowermockTest {
     }
 
     @Test
-    @Ignore
     public void testSingleClassMock() {
         assertEquals("Test String", Foo.getSomeString());
         assertEquals("Static string", Bar.getStaticString());
 
-//        Bridge.mockStatic(Foo.class);
+        Bridge.mockStatic(Foo.class);
 
         assertEquals(null, Foo.getSomeString());
         assertEquals("Static string", Bar.getStaticString());
+
+        Bridge.mockStatic(Bar.class);
+        assertEquals(null, Bar.getStaticString());
+
+        when(Foo.getSomeString()).thenReturn("hello");
+        when(Bar.getStaticString()).thenReturn("world");
+        assertEquals("hello", Foo.getSomeString());
+        assertEquals("world", Bar.getStaticString());
+
+        Bridge.resetMocks();
+        assertEquals("Test String", Foo.getSomeString());
+        assertEquals("Static string", Bar.getStaticString());
+
+        Bridge.mockStatic(Foo.class, Bar.class);
+        assertEquals(null, Foo.getSomeString());
+        assertEquals(null, Bar.getStaticString());
     }
 }

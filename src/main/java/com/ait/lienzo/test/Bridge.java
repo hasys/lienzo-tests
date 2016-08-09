@@ -1,25 +1,33 @@
 package com.ait.lienzo.test;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.ait.lienzo.test.util.MockedClass;
 
 public class Bridge {
 
-    private static boolean staticMocked = false;
+    private static Set<String> staticMocked = new HashSet<>();
     private static MockedClass calledMethod = null;
     private static Map<MockedClass, Object> mockedCalls = new java.util.HashMap();
 
-    public static void mockStatic() {
-        staticMocked = true;
+    public static void mockStatic(Class classToMock, Class... moreClassesToMock) {
+        staticMocked.add(classToMock.getName());
+
+        for (Class clazz : moreClassesToMock) {
+            staticMocked.add(clazz.getName());
+        }
     }
 
     public static void resetMocks() {
-        staticMocked = false;
+        staticMocked.clear();
+        mockedCalls.clear();
+        calledMethod = null;
     }
 
-    public static boolean isStaticMocked() {
-        return staticMocked;
+    public static boolean isStaticMocked(String className) {
+        return staticMocked.contains(className);
     }
 
     public static Object invokeMethod(String className, String methodName) {
