@@ -60,14 +60,15 @@ public class PowermockTest {
         Assert.assertEquals("#0000FF", fColor);
 
         Bridge.mockStatic();
-        assertEquals("Mocked String", Foo.getSomeString());
+        assertEquals(null, Foo.getSomeString());
     }
 
     @Test
     public void testStatic() {
         assertEquals("Test String", Foo.getSomeString());
         Bridge.mockStatic();
-        assertEquals("Mocked String", Foo.getSomeString());
+
+        assertEquals(null, Foo.getSomeString());
     }
 
 }

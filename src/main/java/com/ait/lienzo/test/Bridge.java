@@ -2,7 +2,7 @@ package com.ait.lienzo.test;
 
 public class Bridge {
 
-    public static boolean staticMocked = false;
+    private static boolean staticMocked = false;
 
     public static void mockStatic() {
         staticMocked = true;
@@ -17,6 +17,6 @@ public class Bridge {
     }
 
     public static Object invokeMethod(String className, String methodName) {
-        return "Mocked String";
+        return null;
     }
 }
