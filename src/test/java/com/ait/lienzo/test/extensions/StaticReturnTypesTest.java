@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 @RunWith(LienzoMockitoTestRunner.class)
 // TODO: auto reset mockClasses between testClasses
 @PrepareForTest({Foo.class, Bar.class})
-public class StaticReturnTypes {
+public class StaticReturnTypesTest {
 
     @Before
     public void setUp() {
@@ -25,7 +25,6 @@ public class StaticReturnTypes {
     }
 
     @Test
-    @Ignore
     public void testMockMethodsWithPrimitiveBooleanReturnValues() {
         assertTrue(Bar.getStaticPrimitiveBoolean());
 
@@ -37,7 +36,6 @@ public class StaticReturnTypes {
         when(Bar.getStaticPrimitiveBoolean()).thenReturn(false);
         assertFalse(Bar.getStaticPrimitiveBoolean());
     }
-
 
     @Test
     public void testMockMethodsWithPrimitiveIntReturnValues() {

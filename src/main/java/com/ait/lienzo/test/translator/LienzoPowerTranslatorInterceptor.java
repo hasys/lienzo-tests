@@ -29,35 +29,43 @@ public class LienzoPowerTranslatorInterceptor implements LienzoMockitoClassTrans
     }
 
     private static final String BRIDGE = "com.ait.lienzo.test.Bridge";
-    private static final String VOID = "void";
     private void mockStaticMethod(String className, CtMethod method) throws NotFoundException, CannotCompileException {
         String returnType = method.getReturnType().getName();
-        String methodSignature = createMethodSignature(className, method);
+        String methodSignature = createMethodSignature(className, method, returnType);
         String mockCode = String.format("if ( %s.isStaticMocked(\"%s\") ) {", BRIDGE, className)
-                        + String.format("%s.methodCalled(%s, \"%s\"); ", BRIDGE, methodSignature, returnType);
-        if (isPrimitive(returnType)) {
-            if ("int".equals(returnType)) {
-                method.insertAt(1, mockCode + String.format("return ((Integer)%s.invokeMethod(%s, \"%s\")).intValue();}", BRIDGE, methodSignature, returnType));
-            }
-        } else if (VOID.equals(returnType)) {
-            method.insertAt(1, mockCode + "return;}");
-        } else {
-            method.insertAt(1, mockCode + String.format("return (%s)%s.invokeMethod(%s, \"%s\");}", returnType, BRIDGE, methodSignature, returnType));
+                            + String.format("%s.methodCalled(%s);", BRIDGE, methodSignature)
+                            + createReturnFromMethod(returnType, methodSignature)
+                        + "}";
+        method.insertAt(1, mockCode);
+    }
+
+    private String createReturnFromMethod(String returnType, String methodSignature) {
+        String capitalizedReturnType = returnType.equals("int")? "Integer" : returnType.substring(0, 1).toUpperCase() + returnType.substring(1);
+        switch(returnType) {
+            case "byte":
+            case "short":
+            case "int":
+            case "float":
+            case "double":
+            case "boolean":
+            case "char": return String.format("return (%s).%sValue();", generateInvokeMethod(capitalizedReturnType, methodSignature), returnType);
+            case "void": return "return;";
+            default: return String.format("return %s;", generateInvokeMethod(returnType, methodSignature));
         }
     }
 
-    private String createMethodSignature(String className, CtMethod method) throws NotFoundException {
+    private String generateInvokeMethod(String returnType, String methodSignature) {
+        return String.format("(%s)%s.invokeMethod(%s)", returnType, BRIDGE, methodSignature);
+    }
+
+    private String createMethodSignature(String className, CtMethod method, String returnType) throws NotFoundException {
         String methodName = method.getName();
         String parameters = "";
         for(CtClass parameter : method.getParameterTypes()) {
             parameters += parameter.getName() + ",";
         }
         parameters = "\"" + (parameters.length() > 0 ? parameters.substring(0, parameters.length() - 1) + "\"" : "\"");
-        return '"' + className + "\", \"" + methodName + "\"," + parameters;
-    }
-
-    private boolean isPrimitive(String returnType) {
-        return returnType.equals("int") || returnType.equals("boolean");
+        return '"' + className + "\", \"" + methodName + "\"," + parameters + ", \"" + returnType + '"';
     }
 
     @Override public void interceptAfterParent(ClassPool classPool, String name) throws NotFoundException, CannotCompileException {

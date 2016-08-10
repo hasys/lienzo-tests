@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.activation.UnsupportedDataTypeException;
+
 import com.ait.lienzo.test.util.MockedClass;
 
 public class Bridge {
@@ -30,11 +32,22 @@ public class Bridge {
         return staticMocked.contains(className);
     }
 
-    public static Object invokeMethod(String className, String methodName, String parameters, String returnType) {
+    public static Object invokeMethod(String className, String methodName, String parameters, String returnType) throws UnsupportedDataTypeException {
         Object result = mockedCalls.get(new MockedClass(className, methodName, parameters.split(","), returnType));
-        if (result == null && returnType.equals("int")) {
-            result = 0;
+        if (result == null) {
+            switch (returnType) {
+                case "byte": return (byte)0;
+                case "short": return (short)0;
+                case "int": return 0;
+                case "long": return (long)0;
+                case "float": return 0.0f;
+                case "double": return 0.0;
+                case "boolean": return false;
+                case "char": return '\u0000';
+                default: return result;
+            }
         }
+
         return result;
     }
 
