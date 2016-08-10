@@ -5,14 +5,14 @@ import org.mockito.stubbing.Answer;
 
 public class OngoingStubbing<T> implements org.mockito.stubbing.OngoingStubbing {
 
-    private T stub = null;
+    private MockedClass stub = null;
 
-    public void setStub(T stub) {
+    public void setStub(MockedClass stub) {
         this.stub = stub;
     }
 
     @Override public org.mockito.stubbing.OngoingStubbing thenReturn(Object value) {
-        Bridge.whenInvoked((MockedClass) stub, value);
+        Bridge.whenInvoked(stub, value);
         return this;
     }
 

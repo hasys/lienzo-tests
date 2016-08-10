@@ -28,10 +28,11 @@ import com.ait.lienzo.test.loader.LienzoMockitoClassLoader;
 import com.ait.lienzo.test.settings.Settings;
 import com.ait.lienzo.test.settings.SettingsBuilder;
 import com.ait.lienzo.test.util.LienzoMockitoLogger;
+import com.ait.lienzo.test.util.OngoingStubbing;
 import javassist.ClassPool;
 import javassist.LoaderClassPath;
 import org.mockito.Mockito;
-import org.mockito.stubbing.OngoingStubbing;
+
 
 /**
  * Entry point class for loading this testing framework.
@@ -136,9 +137,9 @@ public class LienzoMockito
         }
     }
 
-    public static <T> OngoingStubbing<T> when(T methodCall) {
+    public static <T> org.mockito.stubbing.OngoingStubbing<T> when(T methodCall) {
         if (Bridge.isMethodPrepared()) {
-            com.ait.lienzo.test.util.OngoingStubbing stub = new com.ait.lienzo.test.util.OngoingStubbing();
+            OngoingStubbing<T> stub = new OngoingStubbing<>();
             stub.setStub(Bridge.getInvoked());
             return stub;
         } else {

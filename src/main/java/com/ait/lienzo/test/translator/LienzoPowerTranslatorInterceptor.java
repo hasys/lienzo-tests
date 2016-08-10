@@ -36,7 +36,9 @@ public class LienzoPowerTranslatorInterceptor implements LienzoMockitoClassTrans
         String mockCode = String.format("if ( %s.isStaticMocked(\"%s\") ) {", BRIDGE, className)
                         + String.format("%s.methodCalled(%s, \"%s\"); ", BRIDGE, methodSignature, returnType);
         if (isPrimitive(returnType)) {
-            method.insertAt(1, mockCode + String.format("return ((Integer)%s.invokeMethod(%s, \"%s\")).intValue();}", BRIDGE, methodSignature, returnType));
+            if ("int".equals(returnType)) {
+                method.insertAt(1, mockCode + String.format("return ((Integer)%s.invokeMethod(%s, \"%s\")).intValue();}", BRIDGE, methodSignature, returnType));
+            }
         } else if (VOID.equals(returnType)) {
             method.insertAt(1, mockCode + "return;}");
         } else {
@@ -55,7 +57,7 @@ public class LienzoPowerTranslatorInterceptor implements LienzoMockitoClassTrans
     }
 
     private boolean isPrimitive(String returnType) {
-        return returnType.equals("int");
+        return returnType.equals("int") || returnType.equals("boolean");
     }
 
     @Override public void interceptAfterParent(ClassPool classPool, String name) throws NotFoundException, CannotCompileException {

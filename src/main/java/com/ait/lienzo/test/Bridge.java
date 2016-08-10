@@ -46,7 +46,7 @@ public class Bridge {
         return calledMethod != null;
     }
 
-    public static Object getInvoked() {
+    public static MockedClass getInvoked() {
         return calledMethod;
     }
 

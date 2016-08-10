@@ -13,10 +13,12 @@
  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
- *  
+ *
  */
 
 package com.ait.lienzo.test;
+
+import java.util.Collection;
 
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwtmockito.GwtMockitoTestRunner;
@@ -27,16 +29,14 @@ import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 
-import java.util.Collection;
-
 /**
  * The main JUnit test runner class.
- * 
+ *
  * By annotation your test class using <code>@RunWith( LienzoMockitoTestRunner.class )</code> the lienzo testing
- * framework comes into scene and its being loaded on your testing classpath.  
+ * framework comes into scene and its being loaded on your testing classpath.
  *
  * @See com.ait.lienzo.test.loader.LienzoMockitoClassLoader
- * 
+ *
  * @author Roger Martinez
  * @since 1.0
  *
