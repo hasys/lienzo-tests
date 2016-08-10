@@ -7,11 +7,17 @@ public class MockedClass {
     private String className;
     private String methodName;
     private String[] parameters;
+    private String returnType;
 
-    public MockedClass(String className, String methodName, String[] parameters) {
+    public MockedClass(String className, String methodName, String[] parameters, String returnType) {
         this.className = className;
         this.methodName = methodName;
         this.parameters = parameters;
+        this.returnType = returnType;
+    }
+
+    public String getReturnType() {
+        return returnType;
     }
 
     @Override

@@ -163,7 +163,6 @@ public class PowermockTest {
     }
 
     @Test
-    @Ignore
     public void testMockPrimitiveReturnValues() {
         assertEquals(7, Foo.getSomeStaticPrimitiveInt());
 

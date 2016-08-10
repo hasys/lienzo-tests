@@ -10,7 +10,7 @@ public class Bridge {
 
     private static Set<String> staticMocked = new HashSet<>();
     private static MockedClass calledMethod = null;
-    private static Map<MockedClass, Object> mockedCalls = new java.util.HashMap();
+    private static Map<MockedClass, Object> mockedCalls = new java.util.HashMap<>();
 
     public static void mockStatic(Class classToMock, Class... moreClassesToMock) {
         staticMocked.add(classToMock.getName());
@@ -30,12 +30,16 @@ public class Bridge {
         return staticMocked.contains(className);
     }
 
-    public static Object invokeMethod(String className, String methodName, String parameters) {
-        return mockedCalls.get(new MockedClass(className, methodName, parameters.split(",")));
+    public static Object invokeMethod(String className, String methodName, String parameters, String returnType) {
+        Object result = mockedCalls.get(new MockedClass(className, methodName, parameters.split(","), returnType));
+        if (result == null && returnType.equals("int")) {
+            result = 0;
+        }
+        return result;
     }
 
-    public static void methodCalled(String className, String methodName, String parameters) {
-        calledMethod = new MockedClass(className, methodName, parameters.split(","));
+    public static void methodCalled(String className, String methodName, String parameters, String returnType) {
+        calledMethod = new MockedClass(className, methodName, parameters.split(","), returnType);
     }
 
     public static boolean isMethodPrepared() {
