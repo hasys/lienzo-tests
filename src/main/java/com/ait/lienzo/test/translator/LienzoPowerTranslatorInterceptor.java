@@ -14,31 +14,35 @@ public class LienzoPowerTranslatorInterceptor implements LienzoMockitoClassTrans
     private Settings settings = null;
 
     @Override public boolean interceptBeforeParent(ClassPool classPool, String name) throws NotFoundException, CannotCompileException {
-        for (String preparedName : settings.getPowerMockPreparations()) {
-            if (preparedName.equals(name)) {
-                CtClass ctClass = classPool.get(name);
-                for (CtMethod method : ctClass.getDeclaredMethods()) {
-                    if (!Modifier.isStatic(method.getModifiers())) {
-                        continue;
-                    }
-                    String mockCode = "com.ait.lienzo.test.Bridge.methodCalled(\"" + name + "\", \"" + method.getName() + "\"); "
-                            + "if ( com.ait.lienzo.test.Bridge.isStaticMocked(\"" + name + "\") ) ";
-                    String returnType = method.getReturnType().getName();
-                    if (isPrimitive(returnType)) {
+        if(!settings.getPowerMockPreparations().contains(name)) {
+            return false;
+        }
 
-                    } else if (returnType.equals("void")) {
-                        method.insertAt(1,
-                                mockCode
-                                +  "return;");
-                    } else {
-                        method.insertAt(1,
-                                 mockCode
-                                 + "return (" + method.getReturnType().getName() + ")com.ait.lienzo.test.Bridge.invokeMethod(\"" + name + "\", \"" + method.getName() + "\");");
-                    }
-                }
+        CtClass ctClass = classPool.get(name);
+        for (CtMethod method : ctClass.getDeclaredMethods()) {
+            if (Modifier.isStatic(method.getModifiers())) {
+                mockStaticMethod(name, method);
             }
         }
+
         return false;
+    }
+
+    private static final String BRIDGE = "com.ait.lienzo.test.Bridge";
+    private static final String VOID = "void";
+    private void mockStaticMethod(String className, CtMethod method) throws NotFoundException, CannotCompileException {
+        String methodName = method.getName();
+        String mockCode = String.format("%s.methodCalled(\"%s\", \"%s\"); ", BRIDGE, className, methodName)
+                        + String.format("if ( %s.isStaticMocked(\"%s\") ) ", BRIDGE, className);
+        String returnType = method.getReturnType().getName();
+
+        if (isPrimitive(returnType)) {
+
+        } else if (VOID.equals(returnType)) {
+            method.insertAt(1, mockCode + "return;");
+        } else {
+            method.insertAt(1, mockCode + String.format("return (%s)%s.invokeMethod(\"%s\", \"%s\");", returnType, BRIDGE, className, methodName));
+        }
     }
 
     private boolean isPrimitive(String returnType) {

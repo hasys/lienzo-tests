@@ -81,27 +81,6 @@ public class PowermockTest {
     }
 
     @Test
-    @Ignore
-    public void testStaticOverriding() {
-        assertEquals("Test String", Foo.getSomeString());
-        assertEquals("Test String: Hello", Foo.getSomeString("Hello"));
-
-        Bridge.mockStatic(Foo.class);
-        assertEquals(null, Foo.getSomeString());
-        assertEquals(null, Foo.getSomeString("Hello"));
-
-        when(Foo.getSomeString()).thenReturn("Mocked Value");
-        assertEquals("Mocked Value", Foo.getSomeString());
-        assertEquals(null, Foo.getSomeString("Hello"));
-
-        when(Foo.getSomeString(anyString())).thenReturn("Mocked!");
-        assertEquals("Mocked!", Foo.getSomeString("Hello"));
-        when(Foo.getSomeString("Hello")).thenReturn("Hello Mocked!");
-        assertEquals("Hello Mocked!", Foo.getSomeString("Hello"));
-        assertEquals("Mocked!", Foo.getSomeString("Any other string"));
-    }
-
-    @Test
     public void testNonStatic() {
         Foo foo = new Foo();
         assertEquals("None static", foo.getSomeNoneStaticString());
@@ -130,20 +109,6 @@ public class PowermockTest {
     }
 
     @Test
-    @Ignore
-    public void testMockPrimitiveReturnValues() {
-        assertEquals(7, Foo.getSomeStaticPrimitiveInt());
-
-        Bridge.mockStatic(Foo.class);
-        assertEquals(0, Foo.getSomeStaticPrimitiveInt());
-
-        when(Foo.getSomeStaticPrimitiveInt()).thenReturn(-9);
-        assertEquals(-9, Foo.getSomeStaticPrimitiveInt());
-        when(Foo.getSomeStaticPrimitiveInt()).thenReturn(15);
-        assertEquals(15, Foo.getSomeStaticPrimitiveInt());
-    }
-
-    @Test
     public void testSingleClassMock() {
         assertEquals("Test String", Foo.getSomeString());
         assertEquals("Static string", Bar.getStaticString());
@@ -168,6 +133,41 @@ public class PowermockTest {
         Bridge.mockStatic(Foo.class, Bar.class);
         assertEquals(null, Foo.getSomeString());
         assertEquals(null, Bar.getStaticString());
+    }
+
+    @Test
+    @Ignore
+    public void testStaticOverriding() {
+        assertEquals("Test String", Foo.getSomeString());
+        assertEquals("Test String: Hello", Foo.getSomeString("Hello"));
+
+        Bridge.mockStatic(Foo.class);
+        assertEquals(null, Foo.getSomeString());
+        assertEquals(null, Foo.getSomeString("Hello"));
+
+        when(Foo.getSomeString()).thenReturn("Mocked Value");
+        assertEquals("Mocked Value", Foo.getSomeString());
+        assertEquals(null, Foo.getSomeString("Hello"));
+
+        when(Foo.getSomeString(anyString())).thenReturn("Mocked!");
+        assertEquals("Mocked!", Foo.getSomeString("Hello"));
+        when(Foo.getSomeString("Hello")).thenReturn("Hello Mocked!");
+        assertEquals("Hello Mocked!", Foo.getSomeString("Hello"));
+        assertEquals("Mocked!", Foo.getSomeString("Any other string"));
+    }
+
+    @Test
+    @Ignore
+    public void testMockPrimitiveReturnValues() {
+        assertEquals(7, Foo.getSomeStaticPrimitiveInt());
+
+        Bridge.mockStatic(Foo.class);
+        assertEquals(0, Foo.getSomeStaticPrimitiveInt());
+
+        when(Foo.getSomeStaticPrimitiveInt()).thenReturn(-9);
+        assertEquals(-9, Foo.getSomeStaticPrimitiveInt());
+        when(Foo.getSomeStaticPrimitiveInt()).thenReturn(15);
+        assertEquals(15, Foo.getSomeStaticPrimitiveInt());
     }
 
     @Test
