@@ -33,14 +33,14 @@ public class LienzoPowerTranslatorInterceptor implements LienzoMockitoClassTrans
     private void mockStaticMethod(String className, CtMethod method) throws NotFoundException, CannotCompileException {
         String returnType = method.getReturnType().getName();
         String methodSignature = createMethodSignature(className, method);
-        String mockCode = String.format("%s.methodCalled(%s, \"%s\"); ", BRIDGE, methodSignature, returnType)
-                        + String.format("if ( %s.isStaticMocked(\"%s\") ) ", BRIDGE, className);
+        String mockCode = String.format("if ( %s.isStaticMocked(\"%s\") ) {", BRIDGE, className)
+                        + String.format("%s.methodCalled(%s, \"%s\"); ", BRIDGE, methodSignature, returnType);
         if (isPrimitive(returnType)) {
-            method.insertAt(1, mockCode + String.format("return ((Integer)%s.invokeMethod(%s, \"%s\")).intValue();", BRIDGE, methodSignature, returnType));
+            method.insertAt(1, mockCode + String.format("return ((Integer)%s.invokeMethod(%s, \"%s\")).intValue();}", BRIDGE, methodSignature, returnType));
         } else if (VOID.equals(returnType)) {
-            method.insertAt(1, mockCode + "return;");
+            method.insertAt(1, mockCode + "return;}");
         } else {
-            method.insertAt(1, mockCode + String.format("return (%s)%s.invokeMethod(%s, \"%s\");", returnType, BRIDGE, methodSignature, returnType));
+            method.insertAt(1, mockCode + String.format("return (%s)%s.invokeMethod(%s, \"%s\");}", returnType, BRIDGE, methodSignature, returnType));
         }
     }
 

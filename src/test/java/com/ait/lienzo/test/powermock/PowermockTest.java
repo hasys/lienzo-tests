@@ -176,7 +176,6 @@ public class PowermockTest {
     }
 
     @Test
-    @Ignore
     public void testInvocationWithoutMock() {
         Foo.getSomeString();
         when(someMock.getSomeInt()).thenReturn(7);
