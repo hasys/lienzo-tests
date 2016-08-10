@@ -116,8 +116,8 @@ public class PowermockTest {
     }
 
     @Test
-    @Ignore
     public void testMockStaticVoidMethods() {
+        assertFalse(Foo.isVoidMethodCalled);
         Foo.someVoidMethod();
         assertTrue(Foo.isVoidMethodCalled);
 

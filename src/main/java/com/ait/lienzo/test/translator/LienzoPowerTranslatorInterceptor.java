@@ -21,12 +21,19 @@ public class LienzoPowerTranslatorInterceptor implements LienzoMockitoClassTrans
                     if (!Modifier.isStatic(method.getModifiers())) {
                         continue;
                     }
+                    String mockCode = "com.ait.lienzo.test.Bridge.methodCalled(\"" + name + "\", \"" + method.getName() + "\"); "
+                            + "if ( com.ait.lienzo.test.Bridge.isStaticMocked(\"" + name + "\") ) ";
                     String returnType = method.getReturnType().getName();
-                    if (!isVoidOrPrimitive(returnType)) {
+                    if (isPrimitive(returnType)) {
+
+                    } else if (returnType.equals("void")) {
                         method.insertAt(1,
-                                "com.ait.lienzo.test.Bridge.methodCalled(\"" + name + "\", \"" + method.getName() + "\"); " +
-                                "if ( com.ait.lienzo.test.Bridge.isStaticMocked(\"" + name + "\") ) " +
-                                    "return (" + method.getReturnType().getName() + ")com.ait.lienzo.test.Bridge.invokeMethod(\"" + name + "\", \"" + method.getName() + "\");");
+                                mockCode
+                                +  "return;");
+                    } else {
+                        method.insertAt(1,
+                                 mockCode
+                                 + "return (" + method.getReturnType().getName() + ")com.ait.lienzo.test.Bridge.invokeMethod(\"" + name + "\", \"" + method.getName() + "\");");
                     }
                 }
             }
@@ -34,8 +41,8 @@ public class LienzoPowerTranslatorInterceptor implements LienzoMockitoClassTrans
         return false;
     }
 
-    private boolean isVoidOrPrimitive(String returnType) {
-        return returnType.equals("void") || returnType.equals("int");
+    private boolean isPrimitive(String returnType) {
+        return returnType.equals("int");
     }
 
     @Override public void interceptAfterParent(ClassPool classPool, String name) throws NotFoundException, CannotCompileException {
