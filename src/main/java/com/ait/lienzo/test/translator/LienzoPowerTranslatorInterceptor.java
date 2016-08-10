@@ -31,18 +31,27 @@ public class LienzoPowerTranslatorInterceptor implements LienzoMockitoClassTrans
     private static final String BRIDGE = "com.ait.lienzo.test.Bridge";
     private static final String VOID = "void";
     private void mockStaticMethod(String className, CtMethod method) throws NotFoundException, CannotCompileException {
-        String methodName = method.getName();
-        String mockCode = String.format("%s.methodCalled(\"%s\", \"%s\"); ", BRIDGE, className, methodName)
+        String methodSignature = createMethodSignature(className, method);
+        String mockCode = String.format("%s.methodCalled(%s); ", BRIDGE, methodSignature)
                         + String.format("if ( %s.isStaticMocked(\"%s\") ) ", BRIDGE, className);
         String returnType = method.getReturnType().getName();
-
         if (isPrimitive(returnType)) {
 
         } else if (VOID.equals(returnType)) {
             method.insertAt(1, mockCode + "return;");
         } else {
-            method.insertAt(1, mockCode + String.format("return (%s)%s.invokeMethod(\"%s\", \"%s\");", returnType, BRIDGE, className, methodName));
+            method.insertAt(1, mockCode + String.format("return (%s)%s.invokeMethod(%s);", returnType, BRIDGE, methodSignature));
         }
+    }
+
+    private String createMethodSignature(String className, CtMethod method) throws NotFoundException {
+        String methodName = method.getName();
+        String parameters = "";
+        for(CtClass parameter : method.getParameterTypes()) {
+            parameters += parameter.getName() + ",";
+        }
+        parameters = "\"" + (parameters.length() > 0 ? parameters.substring(0, parameters.length() - 1) + "\"" : "\"");
+        return '"' + className + "\", \"" + methodName + "\"," + parameters;
     }
 
     private boolean isPrimitive(String returnType) {

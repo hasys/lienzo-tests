@@ -24,8 +24,8 @@ public class Foo {
         return "Test String";
     }
 
-    public static String getSomeString(String value) {
-        return "Test String: " + value;
+    public static String getSomeString(String value, int i) {
+        return "Test String: " + value + i;
     }
 
     public static void someVoidMethod() {

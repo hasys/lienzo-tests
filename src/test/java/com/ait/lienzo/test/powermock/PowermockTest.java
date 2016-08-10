@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -136,24 +135,31 @@ public class PowermockTest {
     }
 
     @Test
-    @Ignore
     public void testStaticOverriding() {
         assertEquals("Test String", Foo.getSomeString());
-        assertEquals("Test String: Hello", Foo.getSomeString("Hello"));
+        assertEquals("Test String: Hello0", Foo.getSomeString("Hello", 0));
 
         Bridge.mockStatic(Foo.class);
         assertEquals(null, Foo.getSomeString());
-        assertEquals(null, Foo.getSomeString("Hello"));
+        assertEquals(null, Foo.getSomeString("Hello", 1));
 
         when(Foo.getSomeString()).thenReturn("Mocked Value");
         assertEquals("Mocked Value", Foo.getSomeString());
-        assertEquals(null, Foo.getSomeString("Hello"));
+        assertEquals(null, Foo.getSomeString("Hello", 2));
 
-        when(Foo.getSomeString(anyString())).thenReturn("Mocked!");
-        assertEquals("Mocked!", Foo.getSomeString("Hello"));
-        when(Foo.getSomeString("Hello")).thenReturn("Hello Mocked!");
-        assertEquals("Hello Mocked!", Foo.getSomeString("Hello"));
-        assertEquals("Mocked!", Foo.getSomeString("Any other string"));
+        when(Foo.getSomeString("", 3)).thenReturn("Mocked!3");
+        assertEquals("Mocked!3", Foo.getSomeString("Hello", 3));
+    }
+
+    @Test
+    @Ignore
+    public void testDifferentCallsOnOneMethod() {
+        Bridge.mockStatic(Foo.class);
+        when(Foo.getSomeString("World", 5)).thenReturn("Mocked!5");
+        assertEquals("Mocked!5", Foo.getSomeString("Hello", 5));
+        when(Foo.getSomeString("Hello", 6)).thenReturn("Hello Mocked!6");
+        assertEquals("Hello Mocked!6", Foo.getSomeString("Hello", 6));
+        assertEquals("Mocked!5", Foo.getSomeString("Any other string", 5));
     }
 
     @Test

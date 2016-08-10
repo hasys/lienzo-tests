@@ -30,12 +30,12 @@ public class Bridge {
         return staticMocked.contains(className);
     }
 
-    public static Object invokeMethod(String className, String methodName) {
-        return mockedCalls.get(new MockedClass(className, methodName));
+    public static Object invokeMethod(String className, String methodName, String parameters) {
+        return mockedCalls.get(new MockedClass(className, methodName, parameters.split(",")));
     }
 
-    public static void methodCalled(String className, String methodName) {
-        calledMethod = new MockedClass(className, methodName);
+    public static void methodCalled(String className, String methodName, String parameters) {
+        calledMethod = new MockedClass(className, methodName, parameters.split(","));
     }
 
     public static boolean isMethodPrepared() {
