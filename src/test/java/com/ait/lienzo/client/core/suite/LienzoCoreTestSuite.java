@@ -32,16 +32,18 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({MultiPathTest.class,
+@Suite.SuiteClasses({
+        BoundingBoxTest.class,
+        ImageElementProxyTest.class,
+        ImageStripsTest.class,
+        ImageTest.class,
+        LienzoHandlerManagerTest.class,
+        LienzoPanelTest.class,
+        MultiPathTest.class,
         PolyLineTest.class,
         TextBoundsWrapTest.class,
-        TextLineBreakWrapTest.class,
-        ImageTest.class,
-        ImageStripsTest.class,
-        ImageElementProxyTest.class,
-        BoundingBoxTest.class,
-        LienzoPanelTest.class,
-        LienzoHandlerManagerTest.class})
+        TextLineBreakWrapTest.class
+})
 public class LienzoCoreTestSuite {
 
     @BeforeClass

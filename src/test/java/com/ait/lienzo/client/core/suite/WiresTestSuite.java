@@ -16,6 +16,7 @@
 
 package com.ait.lienzo.client.core.suite;
 
+import com.ait.lienzo.client.core.shape.AbstractOffsetMultiPointShapeTest;
 import com.ait.lienzo.client.core.shape.wires.MagnetManagerTest;
 import com.ait.lienzo.client.core.shape.wires.SelectionManagerTest;
 import com.ait.lienzo.client.core.shape.wires.WiresConnectorTest;
@@ -41,20 +42,23 @@ import org.junit.runners.Suite;
  * @since 1.0.0-RC2
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({WiresContainerTest.class,
-        WiresShapeTest.class,
-        WiresConnectorTest.class,
-        WiresDockingControlImplTest.class,
-        WiresShapeControlImplTest.class,
-        WiresShapeControlHandleListTest.class,
-        WiresShapeLocationControlImplTest.class,
-        WiresParentPickerControlImplTest.class,
-        WiresConnectorControlImplTest.class,
-        WiresShapeHandlerImplTest.class,
-        WiresCompositeShapeHandlerTest.class,
-        WiresManagerTest.class,
+@Suite.SuiteClasses({
+        AbstractOffsetMultiPointShapeTest.class,
         MagnetManagerTest.class,
-        SelectionManagerTest.class})
+        SelectionManagerTest.class,
+        WiresCompositeShapeHandlerTest.class,
+        WiresConnectorControlImplTest.class,
+        WiresConnectorTest.class,
+        WiresContainerTest.class,
+        WiresDockingControlImplTest.class,
+        WiresManagerTest.class,
+        WiresParentPickerControlImplTest.class,
+        WiresShapeControlHandleListTest.class,
+        WiresShapeControlImplTest.class,
+        WiresShapeHandlerImplTest.class,
+        WiresShapeLocationControlImplTest.class,
+        WiresShapeTest.class
+})
 public class WiresTestSuite {
 
     @BeforeClass

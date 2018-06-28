@@ -130,7 +130,7 @@ public class ImageTest {
         doReturn(false).when(proxy).isLoaded();
         doAnswer(new Answer() {
             @Override
-            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+            public Object answer(InvocationOnMock invocationOnMock) {
                 ((Runnable)invocationOnMock.getArguments()[1]).run();
                 return null;
             }

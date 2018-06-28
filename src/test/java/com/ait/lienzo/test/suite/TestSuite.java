@@ -41,8 +41,8 @@ import org.junit.runners.Suite;
         BasicLienzoMockTest.class,
         BasicLienzoStateTest.class,
         JSOMockTest.class,
-        PointsTest.class,
         PointsMockTest.class,
+        PointsTest.class,
         StubPointsTest.class
 })
 public class TestSuite
